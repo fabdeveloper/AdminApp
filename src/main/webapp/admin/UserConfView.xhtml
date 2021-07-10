@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:em="http://jsfcompslib.src/taglib"
+	xmlns:p="http://java.sun.com/jsf/html">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>User Grants Configuration</title>
+</head>
+<p:body>
+
+	<p:panelGrid columns="2">
+	
+		<em:UserEntityFormControl
+			user="#{userEntityManagementControlBB.user}"
+			bean="#{userEntityFormControlBB}"		
+			actionSearchById="#{userEntityManagementControlBB.process3()}"
+			actionSearchByNick="#{userEntityManagementControlBB.process4()}"
+		>	
+		</em:UserEntityFormControl>		
+		
+		<em:DobleListaControl 
+			bean="#{userEntityManagementControlBB}"
+			listaItems1="#{userEntityManagementControlBB.lista1}"
+			itemseleccionadoLista1="#{userEntityManagementControlBB.sel1}"
+			listaItems2="#{userEntityManagementControlBB.lista2}"
+			itemseleccionadoLista2="#{userEntityManagementControlBB.sel2}"		
+		>		
+		</em:DobleListaControl>
+	
+	</p:panelGrid>
+	<p:form>
+		<p:commandButton value="Update" action="#{userEntityManagementControlBB.process()}"></p:commandButton><br/>	
+	</p:form>
+
+	<p:messages>
+		<p:message></p:message>
+	</p:messages>
+
+
+
+
+
+</p:body>
+</html>
