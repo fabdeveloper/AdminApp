@@ -15,12 +15,16 @@ import javax.transaction.Transactional;
 import src.entity.DeliveryDetailsStatusType;
 import src.entity.Grupo;
 import src.entity.User;
+import src.entity.UserProfile;
 import src.inter.IServiceLocator;
 import src.jsfcompslib.util.interfaces.IProcessable;
 
 @Named
 @SessionScoped
-public class UserEntityManagementControlBB implements Serializable, IProcessable{
+public class UserEntityManagementControlBB implements Serializable, IProcessable{	
+
+	private static final long serialVersionUID = 1L;
+	
 	
 	@Inject
 	private IServiceLocator serviceLocator;	
@@ -36,62 +40,94 @@ public class UserEntityManagementControlBB implements Serializable, IProcessable
 	private String sel2;
 	
 	
-	@Transactional
-	@Override
-	public String process() {		
-		publish("inicia process()");
-		getUser().setListaGrupos(createListaGrupos(getLista2()));
-		user = getServiceLocator().getUserServices().update(getUser());
+	private void updateUserToDB() {
+		publish("updateUserToDB() - intento actualizar usuario = " + getUser());
+		user = getServiceLocator().getUserServices().merge(getUser());
 		getServiceLocator().getEntityManager().flush();
-		String msg = "Actualizado usuario : " + user;
-		publish(msg);
-		return null;
+		setLista2(null);	
 	}
 	
-	private List<Grupo> createListaGrupos(List<String> listaNombres) {
-		publish("inicia createListaGrupos() - size= " + listaNombres.size());
-		List<Grupo> nuevaLista = new ArrayList<Grupo>();
-		for(String nombre : listaNombres) {
-			for(Grupo grupo : listaGrupos) {
-				if(grupo.getName().matches(nombre)) {
-					nuevaLista.add(grupo);
-				}
-			}
-		}	
-		publish("nuevaLista creada con size = " + nuevaLista.size());
-		return nuevaLista;		
+	private void addGroupToUser(Grupo grupo) {
+		
+		getUser().addGrupo(grupo);		
+		setLista2(null);
 	}
+	
+	private void removeGroupFromUser(Grupo grupo) {
+		
+		getUser().removeGrupo(grupo);	
+		setLista2(null);
+	}
+	
+	private Grupo getGrupoFromName(String name) {
+		Grupo result = null;
+		for(Grupo grupo : getListaGrupos()) {
+			if(grupo.getName().matches(name)) {
+				result = grupo;
+			}
+		}
+		return result;
+	}
+	
+	
+	private void loadUserById() {
+		
+		if(getUser().getId() != null) {
+			user = getServiceLocator().getUserServices().read(getUser().getId());
+			setLista2(null);
+		}
+		
+	}
+	
+	private void loadUserByNick() {
+		
+		if(getUser().getNick() != null) {
+			user = getServiceLocator().getUserServices().createNamedQuery("byNick", "nick", getUser().getNick());
+			setLista2(null);
+		}		
+	}
+	
+	
+	
+	@Transactional
+	@Override
+	public String process() {	// actualiza el user en DB	
+
+		updateUserToDB();
+		
+		publish("Actualizado usuario : " + getUser());
+		return null;
+	}	
 	
 	@Override
 	public String process1() {
 		
 		if(!getLista2().contains(getSel1())) {
-			getLista2().add(getSel1());
+			getLista2().add(getSel1()); // agrega en la lista2
+			
+			addGroupToUser(getGrupoFromName(getSel1()));
 		}
 		return null;
 	}
 	
 	@Override
-	public String process2() {		
-		getLista2().remove(getSel2());
+	public String process2() {		// elimina un grupo de la lista de grupos del usuario
+		
+		removeGroupFromUser(getGrupoFromName(getSel2()));		
 		return null;
 	}
 	
 	@Override
-	public String process3() {
-		if(getUser().getId() != null) {
-			user = getServiceLocator().getUserServices().read(getUser().getId());
-			setLista2(null);
-		}
+	public String process3() { // load user by ID
+		
+		loadUserById();
 		return null;
 	}
 	
 	@Override
-	public String process4() {
-		if(getUser().getNick() != null) {
-			user = getServiceLocator().getUserServices().createNamedQuery("byNick", "nick", getUser().getNick());
-			setLista2(null);
-		}
+	public String process4() { // load user by NICK
+		
+		loadUserByNick();
 		return null;
 	}
 
@@ -113,7 +149,6 @@ public class UserEntityManagementControlBB implements Serializable, IProcessable
 	public User getUser() {
 		if(user == null) {
 			user = new User();
-			user.setListaGrupos(new ArrayList<Grupo>());
 		}
 		return user;
 	}
@@ -150,8 +185,9 @@ public class UserEntityManagementControlBB implements Serializable, IProcessable
 	public List<String> getLista2() {
 		if(lista2 == null) {
 			lista2 = new ArrayList<String>();
-			for(Grupo grupo : getUser().getListaGrupos()) {
-				lista2.add(grupo.getName());
+			for(UserProfile profile : getUser().getProfiles()) {
+				
+				lista2.add(profile.getGrupo().getName());
 			}
 		}
 		return lista2;
@@ -177,55 +213,13 @@ public class UserEntityManagementControlBB implements Serializable, IProcessable
 		this.sel2 = sel2;
 	}
 
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	
 	
-	
-	/*
-	public List<Grupo> getLista1() {
-		if(lista1 == null) {
-			lista1 = getServiceLocator().getGrupoServices().readAll();
-		}
-		return lista1;
-	}
 
-	public void setLista1(List<Grupo> lista1) {
-		this.lista1 = lista1;
-	}
-
-	public List<Grupo> getLista2() {
-		if(lista2 == null) {
-			if(user == null) {
-				lista2 = new ArrayList<Grupo>();
-			}
-			else {
-				lista2 = getUser().getListaGrupos();
-			}
-			
-		}
-		return lista2;
-	}
-
-	public void setLista2(List<Grupo> lista2) {
-		this.lista2 = lista2;
-	}
-
-	public Grupo getSel1() {
-		return sel1;
-	}
-
-	public void setSel1(Grupo sel1) {
-		this.sel1 = sel1;
-	}
-
-	public Grupo getSel2() {
-		return sel2;
-	}
-
-	public void setSel2(Grupo sel2) {
-		this.sel2 = sel2;
-	}
-	*/
-	
 	
 	
 
