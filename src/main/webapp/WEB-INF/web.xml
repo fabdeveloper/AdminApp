@@ -43,6 +43,7 @@
         <role-name>ADMIN</role-name>
     </security-role>
 
+<!-- 
     <security-constraint>
     	<web-resource-collection>
     		<web-resource-name>AdminApp</web-resource-name>
@@ -58,6 +59,6 @@
     
     </security-constraint>
     
-
+ -->
     
 </web-app>

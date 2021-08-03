@@ -11,13 +11,44 @@
 
 	<p:panelGrid columns="2">
 	
-		<em:UserEntityFormControl
-			user="#{userEntityManagementControlBB.user}"
-			bean="#{userEntityFormControlBB}"		
-			actionSearchById="#{userEntityManagementControlBB.process3()}"
-			actionSearchByNick="#{userEntityManagementControlBB.process4()}"
-		>	
-		</em:UserEntityFormControl>		
+		<em:UserControl
+	user_id="#{userEntityManagementControlBB.user.id}"
+	nick="#{userEntityManagementControlBB.user.nick}"
+	name="#{userEntityManagementControlBB.user.name}"
+	password="#{userEntityManagementControlBB.user.password}"
+	telephone="#{userEntityManagementControlBB.user.telephone}"
+	address="#{userEntityManagementControlBB.user.address}"
+	email="#{userEntityManagementControlBB.user.email}"
+	bean="#{userEntityManagementControlBB}"
+	
+	b_required_nick="true"
+	b_required_name="true"
+	b_required_password="true"
+	b_required_telephone="true"
+	b_required_address="true"
+	b_required_email="true"
+	
+	label_id="#{generalLocalizationHelper.getString('user_management_id')}"
+	label_nick="#{generalLocalizationHelper.getString('user_management_nick')}"
+	label_name="#{generalLocalizationHelper.getString('user_management_name')}"
+	label_password="#{generalLocalizationHelper.getString('user_management_password')}"
+	label_telephone="#{generalLocalizationHelper.getString('user_management_telephone')}"
+	label_address="#{generalLocalizationHelper.getString('user_management_address')}"
+	label_email="#{generalLocalizationHelper.getString('user_management_email')}"
+	
+	msg_required_nick="#{generalLocalizationHelper.getString('user_management_nick_required_msg')}"
+	msg_required_name="#{generalLocalizationHelper.getString('user_management_name_required_msg')}"
+	msg_required_password="#{generalLocalizationHelper.getString('user_management_password_required_msg')}"
+	msg_required_telephone="#{generalLocalizationHelper.getString('user_management_telephone_required_msg')}"
+	msg_required_address="#{generalLocalizationHelper.getString('user_management_address_required_msg')}"
+	msg_required_email="#{generalLocalizationHelper.getString('user_management_email_required_msg')}"
+	
+	button_text_create_user="#{generalLocalizationHelper.getString('user_management_buttontext_crear_user')}"
+	button_text_update_user="#{generalLocalizationHelper.getString('user_management_buttontext_actualizar_user')}"	
+	>
+	</em:UserControl>
+	
+	
 		
 		<em:DobleListaControl 
 			bean="#{userEntityManagementControlBB}"
@@ -30,7 +61,9 @@
 	
 	</p:panelGrid>
 	<p:form>
-		<p:commandButton value="Update" action="#{userEntityManagementControlBB.process()}"></p:commandButton><br/>	
+		<p:commandButton value="Search by Id" action="#{userEntityManagementControlBB.process3()}"></p:commandButton><br/>	
+		<p:commandButton value="Search by Nick" action="#{userEntityManagementControlBB.process4()}"></p:commandButton><br/>	
+		
 	</p:form>
 
 	<p:messages>
@@ -43,3 +76,17 @@
 
 </p:body>
 </html>
+
+
+<!-- 
+
+		<em:UserEntityFormControl
+			user="#{userEntityManagementControlBB.user}"
+			bean="#{userEntityManagementControlBB}"		
+			actionSearchById="#{userEntityManagementControlBB.process3()}"
+			actionSearchByNick="#{userEntityManagementControlBB.process4()}"
+		>	
+		</em:UserEntityFormControl>	
+
+
+ -->

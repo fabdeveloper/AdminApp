@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:p="http://java.sun.com/jsf/html"
+	xmlns:em="http://jsfcompslib.src/taglib"
+	
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+
+
+<body>
+	
+	<p:form >
+
+		<p:panelGrid columns="2">
+
+		<p:outputLabel value="#{generalLocalizationHelper.getString('user_management_id')}"></p:outputLabel>
+		<p:inputText id="textid" name="textid" 
+		immediate="true" maxlength="10" readonly="true"
+			value="#{userManagementBB.user.id}"
+			></p:inputText>		
+		<p:outputLabel value="#{generalLocalizationHelper.getString('user_management_name')}" ></p:outputLabel>
+		<p:inputText id="textname" name="textname" 
+			immediate="true" maxlength="40" 
+			value="#{userManagementBB.user.name}" 
+			></p:inputText>
+		<p:outputLabel value="#{generalLocalizationHelper.getString('user_management_nick')}" ></p:outputLabel>
+		<p:inputText id="textnick" name="textnick"
+			immediate="true" maxlength="40" 
+			value="#{userManagementBB.user.nick}"
+			></p:inputText>
+		<p:outputLabel value="#{generalLocalizationHelper.getString('user_management_email')}" ></p:outputLabel>
+		<p:inputText id="textemail" name="textemail"
+			immediate="true" maxlength="40" 
+			value="#{userManagementBB.user.email}"
+			></p:inputText>
+		<p:outputLabel value="#{generalLocalizationHelper.getString('user_management_password')}"></p:outputLabel>
+		<p:inputText id="textpassword" name="textpassword"
+			immediate="true" maxlength="40" 
+			value="#{userManagementBB.user.password}"
+			></p:inputText>
+		<p:outputLabel value="#{generalLocalizationHelper.getString('user_management_address')}"></p:outputLabel>
+		<p:inputText id="textaddress" name="textaddress"
+			immediate="true" maxlength="100" 
+			value="#{userManagementBB.user.address}"
+			></p:inputText>
+		<p:outputLabel value="#{generalLocalizationHelper.getString('user_management_telephone')}" ></p:outputLabel>
+		<p:inputText id="texttelephone" name="texttelephone"
+			immediate="true" maxlength="20" 
+			value="#{userManagementBB.user.telephone}"
+			></p:inputText>
+		
+				
+
+			
+		
+		<em:Listas2Control 
+			addElementToList2="#{userManagementBB.addElementToList2()}"
+			removeElementFromList2="#{userManagementBB.removeElementFromList2()}"
+			
+			listaItems1="#{userManagementBB.lista1}"
+			itemseleccionadoLista1="#{userManagementBB.sel1}"
+			listaItems2="#{userManagementBB.lista2}"
+			itemseleccionadoLista2="#{userManagementBB.sel2}"		
+		>		
+		</em:Listas2Control><br/>
+		
+		
+		<p:commandButton id="botoncrear" name="botoncrear" value="#{generalLocalizationHelper.getString('user_management_buttontext_crear_user')}"
+			action="#{userManagementBB.createNew()}"></p:commandButton>
+		<p:commandButton id="botonactualizar" name="botonactualizar" value="#{generalLocalizationHelper.getString('user_management_buttontext_actualizar_user')}"
+			action="#{userManagementBB.updateUser()}"></p:commandButton>
+			
+		<p:outputLabel value="#{generalLocalizationHelper.getString('user_management_id')}"></p:outputLabel>
+		<p:inputText id="textidsearch" name="textidsearch" 
+					immediate="true" maxlength="10" value="#{userManagementBB.idSearch}">
+		</p:inputText><br/>
+		<p:commandButton value="Search by Id" action="#{userManagementBB.searchById()}"></p:commandButton>						
+			
+		<p:outputLabel value="#{generalLocalizationHelper.getString('user_management_nick')}" ></p:outputLabel>
+		<p:inputText id="textnicksearch" name="textnicksearch"
+					immediate="true" maxlength="40" value="#{userManagementBB.nickSearch}">
+		</p:inputText><br/>		
+		<p:commandButton value="Search by Nick" action="#{userManagementBB.searchByNick()}"></p:commandButton>
+		
+				</p:panelGrid>
+		
+	</p:form>
+</body>
+</html>
+		<!-- required="true" requiredMessage="#{generalLocalizationHelper.getString('user_management_name_required_msg')}" -->
+		<!-- required="true" requiredMessage="#{generalLocalizationHelper.getString('user_management_nick_required_msg')}" -->
+		<!-- required="true" requiredMessage="#{generalLocalizationHelper.getString('user_management_email_required_msg')}" -->
+		<!-- required="true" requiredMessage="#{generalLocalizationHelper.getString('user_management_password_required_msg')}" -->
+		<!-- required="true" requiredMessage="#{generalLocalizationHelper.getString('user_management_telephone_required_msg')}" -->
+		<!-- required="true" requiredMessage="#{generalLocalizationHelper.getString('user_management_address_required_msg')}" -->
+		
+		
+		
+		
+		
+		

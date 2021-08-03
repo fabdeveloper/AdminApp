@@ -13,6 +13,15 @@
 		   <to-view-id>/admin/UserConfView.xhtml</to-view-id>
 	   </navigation-case> 
    </navigation-rule>   
+   
+   
+      <navigation-rule>
+	   <from-view-id>/*</from-view-id>
+	   <navigation-case>
+		   <from-outcome>users</from-outcome>
+		   <to-view-id>/admin/UserManagement.xhtml</to-view-id>
+	   </navigation-case> 
+   </navigation-rule>  
 
 
  

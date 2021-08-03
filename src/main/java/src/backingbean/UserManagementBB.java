@@ -2,10 +2,8 @@ package src.backingbean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -13,66 +11,98 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 
-import src.entity.DeliveryDetailsStatusType;
 import src.entity.Grupo;
 import src.entity.User;
 import src.entity.UserProfile;
 import src.inter.IServiceLocator;
-import src.jsfcompslib.util.interfaces.IProcessable;
 
 @Named
 @SessionScoped
-public class UserEntityManagementControlBB implements Serializable, IProcessable{	
+public class UserManagementBB implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 15L;
+
+	@Inject 
+	private IServiceLocator serviceLocator;
 	
+	private User user;
 	
-	@Inject
-	private IServiceLocator serviceLocator;	
+	private String nickSearch = "NO_INICIALIZADO";
+	private Integer idSearch = 0;
 	
-	private User user = null;
-	
-	
+	// Grupo - doubleListaControl
 	private List<Grupo> listaGrupos;	
-
 	private List<String> lista1;	
-	private List<String> lista2;
-	
+	private List<String> lista2;	
 	private String sel1;
 	private String sel2;
 	
-	
-	@Transactional
-	public void createNew() {
-		createUser();
+	private void publish(String msg) {
+		System.out.println("msg");
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(msg));
 	}
 	
-	@Transactional
-	public void updateUser() {
-		updateUserToDB();
-	}
+	public String searchById() {
+		publish("searchById() - id = " + getIdSearch());
 
-	
-	@Transactional
-	public void createUser() {
-		publish("createUser() - " + getUser());
-//		try {
-			getServiceLocator().getUserServices().persist(getUser());
-			getServiceLocator().getEntityManager().flush();
-			setLista2(null);	
+		setUser(getServiceLocator().getUserServices().read(getIdSearch()));		
+		setLista2(null);	
 
-//		}catch(Throwable t) {
-//			publish("ERROR - persist : " + t.getMessage());
-//			
-//		}
+		return "users";
 	}
 	
-	private void updateUserToDB() {
-		publish("updateUserToDB() - intento actualizar usuario = " + getUser());
-		user = getServiceLocator().getUserServices().merge(getUser());
+	public String searchByNick() {
+		publish("searchByNick() - nick = " + getNickSearch());
+		setUser(getServiceLocator().getUserServices().createNamedQuery("byNick", "nick", getNickSearch()));	
+		setLista2(null);	
+
+		publish("cargado user = " + getUser());
+		
+		return "users";
+	}
+	
+	@Transactional
+	public String createNew() {
+		publish("createNew() - user = " + getUser());
+
+		getServiceLocator().getUserServices().persist(getUser());	
 		getServiceLocator().getEntityManager().flush();
 		setLista2(null);	
+		return "users";
+
 	}
+	
+	@Transactional
+	public String updateUser() {
+		publish("updateUser() - user = " + getUser());
+
+		getServiceLocator().getUserServices().merge(getUser());	
+		getServiceLocator().getEntityManager().flush();
+		setLista2(null);	
+		return "users";
+
+	}
+	
+	public String addElementToList2() {
+		publish("addElementToList2() - elem = " + getSel1());
+
+		if(!getLista2().contains(getSel1())) {
+			getLista2().add(getSel1()); // agrega en la lista2
+			
+			addGroupToUser(getGrupoFromName(getSel1()));
+		}
+		return null;
+	}
+	
+	public String removeElementFromList2() {
+		publish("removeElementFromList2() - elem = " + getSel2());
+
+		removeGroupFromUser(getGrupoFromName(getSel2()));		
+
+		return null;
+	}
+	
 	
 	private void addGroupToUser(Grupo grupo) {
 		
@@ -96,74 +126,6 @@ public class UserEntityManagementControlBB implements Serializable, IProcessable
 		return result;
 	}
 	
-	
-	private void loadUserById() {
-		
-		if(getUser().getId() != null) {
-			user = getServiceLocator().getUserServices().read(getUser().getId());
-			setLista2(null);
-		}
-		
-	}
-	
-	private void loadUserByNick() {
-		publish("loadUserByNick() - nick= " + user.getNick());
-		if(getUser().getNick() != null) {
-			user = getServiceLocator().getUserServices().createNamedQuery("byNick", "nick", getUser().getNick());
-			setLista2(null);
-		}		
-	}
-	
-	
-	
-	@Transactional
-	@Override
-	public String process() {	// actualiza el user en DB	
-
-		updateUserToDB();
-		
-		publish("Actualizado usuario : " + getUser());
-		return null;
-	}	
-	
-	@Override
-	public String process1() {
-		
-		if(!getLista2().contains(getSel1())) {
-			getLista2().add(getSel1()); // agrega en la lista2
-			
-			addGroupToUser(getGrupoFromName(getSel1()));
-		}
-		return null;
-	}
-	
-	@Override
-	public String process2() {		// elimina un grupo de la lista de grupos del usuario
-		
-		removeGroupFromUser(getGrupoFromName(getSel2()));		
-		return null;
-	}
-	
-	@Override
-	public String process3() { // load user by ID
-		
-		loadUserById();
-		return null;
-	}
-	
-	@Override
-	public String process4() { // load user by NICK
-		
-		loadUserByNick();
-		return null;
-	}
-
-	
-	
-	private void publish(String msg) {
-		System.out.println(msg);
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(msg));
-	}
 
 	public IServiceLocator getServiceLocator() {
 		return serviceLocator;
@@ -182,6 +144,22 @@ public class UserEntityManagementControlBB implements Serializable, IProcessable
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getNickSearch() {
+		return nickSearch;
+	}
+
+	public void setNickSearch(String nickSearch) {
+		this.nickSearch = nickSearch;
+	}
+
+	public Integer getIdSearch() {
+		return idSearch;
+	}
+
+	public void setIdSearch(Integer idSearch) {
+		this.idSearch = idSearch;
 	}
 
 	public List<Grupo> getListaGrupos() {
@@ -243,11 +221,5 @@ public class UserEntityManagementControlBB implements Serializable, IProcessable
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-	
-	
-
-	
-	
 
 }
