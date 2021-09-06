@@ -43,9 +43,9 @@
 	</dependency>
 
 	<dependency>
-  		<groupId>JEE7</groupId>
+  		<groupId>EShop</groupId>
   		<artifactId>RS3Utility</artifactId>  		
-  		<version>0</version>  		
+  		<version>1</version>  		
   	</dependency>
 
 	<dependency>

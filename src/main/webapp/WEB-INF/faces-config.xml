@@ -22,7 +22,51 @@
 		   <to-view-id>/admin/UserManagement.xhtml</to-view-id>
 	   </navigation-case> 
    </navigation-rule>  
-
-
+   
+    <navigation-rule>
+	   <from-view-id>/*</from-view-id>
+	   <navigation-case>
+		   <from-outcome>shop</from-outcome>
+		   <to-view-id>http://localhost:8080/RS3/index.xhtml</to-view-id>
+		   <redirect></redirect>
+		   
+	   </navigation-case> 
+   </navigation-rule>  
+   
+    <navigation-rule>
+	   <from-view-id>/*</from-view-id>
+	   <navigation-case>
+		   <from-outcome>loadproducts</from-outcome>
+		   <to-view-id>http://localhost:8080/Lp/</to-view-id>
+		   
+	   </navigation-case> 
+   </navigation-rule>  
+   
+    <navigation-rule>
+	   <from-view-id>/*</from-view-id>
+	   <navigation-case>
+		   <from-outcome>shipments</from-outcome>
+		   <to-view-id>http://localhost:8080/EShopProductDeliveryManagement/</to-view-id>
+		   
+	   </navigation-case> 
+   </navigation-rule> 
+      
+    <navigation-rule>
+	   <from-view-id>/*</from-view-id>
+	   <navigation-case>
+		   <from-outcome>maintenancetasks</from-outcome>
+		   <to-view-id>/admin/UserManagement.xhtml</to-view-id>
+		   
+	   </navigation-case> 
+   </navigation-rule> 
+      
+    <navigation-rule>
+	   <from-view-id>/*</from-view-id>
+	   <navigation-case>
+		   <from-outcome>reports</from-outcome>
+		   <to-view-id>/admin/UserManagement.xhtml</to-view-id>
+		   
+	   </navigation-case> 
+   </navigation-rule> 
  
 </faces-config>

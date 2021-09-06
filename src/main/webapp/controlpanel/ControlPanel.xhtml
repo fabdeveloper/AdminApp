@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:p="http://java.sun.com/jsf/html"
+	xmlns:comp="http://jsfcompslib.src/taglib"	
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+
+
+<p:body>
+	
+
+
+	<comp:ControlPanelComp
+
+ShopField="#{controlPanelBB.actionShop()}"
+LoadProductField="#{controlPanelBB.actionLoadProducts()}"
+ShipmentsField="#{controlPanelBB.actionShipments()}"
+MaintenanceTasksField="#{controlPanelBB.actionMaintenanceTasks()}"
+ReportsField="#{controlPanelBB.actionReports()}"
+UsersAndRolesField="#{controlPanelBB.actionUsersAndRoles()}"
+
+
+
+>
+</comp:ControlPanelComp>
+
+
+	<p:panelGrid columns="1">
+
+
+	<p:outputLink value="http://localhost:8080/RS3/index.xhtml">
+		<p:outputText value="Shop"></p:outputText>
+	</p:outputLink>
+	
+		<p:outputLink value="http://localhost:8080/Lp">
+		<p:outputText value="Load Product"></p:outputText>
+	</p:outputLink>
+	
+		<p:outputLink value="http://localhost:8080/EShopProductDeliveryManagement">
+		<p:outputText value="Shipments"></p:outputText>
+	</p:outputLink>
+	
+		<p:outputLink value="http://localhost:8080/RS3/index.xhtml">
+		<p:outputText value="Maintenance Tasks"></p:outputText>
+	</p:outputLink>
+	
+		<p:outputLink value="http://localhost:8080/RS3/index.xhtml">
+		<p:outputText value="Reports"></p:outputText>
+	</p:outputLink>
+	
+		<p:outputLink value="#{controlPanelBB.actionShop()}">
+		<p:outputText value="Users and Roles"></p:outputText>
+	</p:outputLink>
+	
+	
+		</p:panelGrid>
+	
+</p:body>
+
+
+</html>	
+		
